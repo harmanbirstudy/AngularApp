@@ -1,0 +1,61 @@
+
+<div class="row">
+  <div class="col-4">
+    <div class="sticky-top">
+    <div class="list-group">
+      <a  class="list-group-item list-group-item-action"
+      [class.active]="!category"
+      routerLink="/"
+      >
+        All Categories
+      </a>
+      <a *ngFor="let c of categoryList"
+      routerLink="/"
+      [queryParams]="{category : c.type}"
+      class="list-group-item list-group-item-action"
+      [class.active]="category === c.type">
+        {{c.name}}
+      </a>
+    </div>
+  </div>
+  </div>
+  <div class="col">
+    <div class="row">
+      <ng-container *ngFor="let p of filteredProducts ; let i=index">
+        <div class="col">
+          <div class="card">
+         <!-- <div class="card" style="width: 100%;"> -->
+            <img class="card-img-top" [src]="p.imageurl" alt="{{p.title}}">
+            <div class="card-body">
+              <h4 class="card-title">{{p.title}}</h4>
+              <p class="card-text">{{p.price | currency:'USD':true}}</p>
+              <div class="card-footer">
+              <button
+              *ngIf="p.quantity == 0;else updateQuantity"
+              (click)="addToCart(p)" class="btn btn-secondary btn-block">Add to Cart</button>
+              <ng-template #updateQuantity>
+                <div class="row no-gutters">
+                  <div class="col-4">
+                    <button
+                    (click)="removeFromCart(p)"
+                    class="btn btn-secondary btn-block">-</button>
+                  </div>
+                  <div class="col-4 text-center">
+                    {{p.quantity}}
+                  </div>
+                  <div class="col-4">
+                    <button (click)="addToCart(p)" class="btn btn-secondary btn-block">+</button>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="(i+1)%2===0" class="w-100"></div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+

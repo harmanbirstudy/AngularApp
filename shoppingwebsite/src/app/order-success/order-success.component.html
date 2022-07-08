@@ -1,0 +1,40 @@
+<div class="card" >
+  <div class="card-body">
+<h1 class="card-title">Order Success</h1>
+
+<ng-container *ngIf="order">
+  <p>
+    You have successfully placed your order!! Order number : {{order.orderid}}
+  </p>
+
+  <table class="table">
+    <thead>
+      <tr>
+         <th>Image</th>
+        <th>Product</th>
+        <th >Quantity</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tr *ngFor="let p of order.products">
+      <td>
+        <div [style.backgroundImage]="'url('+p.imageurl+')'" class="thumbnail"></div>
+        <!-- <img [src]="p.imageurl" class="thumbnail"> -->
+      </td>
+      <td>{{p.title}}</td>
+      <td>{{p.quantity}}</td>
+      <!-- <td>{{p.quantity * p.price}}</td> -->
+      <td>{{getItemTotalPrice(p)|currency:'USD':true}}</td>
+    </tr>
+    <tfoot>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>{{totalPrice|currency:'USD':true}}</th>
+      </tr>
+    </tfoot>
+  </table>
+</ng-container>
+</div>
+</div>

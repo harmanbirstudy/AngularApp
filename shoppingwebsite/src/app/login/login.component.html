@@ -1,0 +1,70 @@
+<div class="card" style="width: 50%;" >
+  <div class="card-body">
+<h1 class="card-title">Login</h1>
+    <form
+      name="form"
+      (ngSubmit)="f.form.valid && onSubmit()"
+      #f="ngForm"
+      novalidate
+    >
+    <div class="form-group">
+      <label for="email"><h6>Email</h6></label>
+      <input
+        type="email"
+        class="form-control"
+        name="email"
+        [(ngModel)]="form.email"
+        required
+        email
+        #email="ngModel"
+        placeholder="email"
+      />
+      <div class="alert-danger" *ngIf="(email.touched && email.invalid)||(f.submitted && email.invalid)">
+        <div *ngIf="email.errors.required">Email is required</div>
+        <div *ngIf="email.errors.email">
+          Email must be a valid email address
+        </div>
+      </div>
+    </div>
+      <div class="form-group">
+        <label for="password"><h6>Password</h6></label>
+        <input
+          type="password"
+          class="form-control"
+          name="password"
+          [(ngModel)]="form.password"
+          required
+          #password="ngModel"
+          placeholder="pasword"
+        />
+        <div
+          class="alert alert-danger"
+          role="alert"
+          *ngIf="(password.touched && password.invalid)||(f.submitted && password.invalid)"
+        >
+          <div *ngIf="password.errors.required">Password is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary ">
+          Login
+        </button>
+      </div>
+
+    </form>
+    <div class="form-group">
+      <button
+        (click)="loginWithGoogle()"
+       class="btn btn-primary">Login with google</button>
+      </div>
+      <div class="form-group">
+        <div
+          class="alert alert-danger"
+          role="alert"
+          *ngIf="isLoginFailed"
+        >
+          Login failed: {{ errorMessage }}
+        </div>
+      </div>
+    </div>
+  </div>

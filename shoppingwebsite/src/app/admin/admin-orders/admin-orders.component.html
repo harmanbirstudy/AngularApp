@@ -1,0 +1,27 @@
+<h1>All User Orders</h1>
+<ng-container *ngIf="orders">
+<table class="table table-bordered table-striped table-hover" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"  >
+  <thead>
+    <tr>
+      <th>UserName</th>
+      <th>OrderId</th>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let o of orders ">
+      <td>{{o.name}}</td>
+      <td>{{o.orderid}}</td>
+      <td>{{transformDate(o.orderdate)}}</td>
+      <td>
+        <a [routerLink]="['/order-success/',o.orderid]">View</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</ng-container>
+<ng-container *ngIf="!orders">
+  <h3>There are no orders!!</h3>
+</ng-container>
+

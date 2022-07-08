@@ -1,0 +1,90 @@
+<h2>Shipping</h2>
+<div class="row">
+  <!-- <div class="col-6"> -->
+    <div class="col-sm-6">
+    <form  name="form"
+    (ngSubmit)="f.form.valid && onSubmit()"
+    #f="ngForm"
+    novalidate>
+    <div class="form-group">
+      <label for="name"><i class="fa fa-user"></i> Full Name</label>
+      <input  [(ngModel)]="form.name"  #name="ngModel" name="name" id="name" type="text" class="form-control" required >
+      <div class="alert alert-danger" *ngIf="(name.touched && name.invalid)||(f.submitted && name.invalid)">
+        Name is required.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="addline1"><i class="fa fa-address-card-o"></i> Address</label>
+      <input  [(ngModel)]="form.addline1"  #addline1="ngModel" name="addline1" id="addline1" placeholder="Line 1" type="text" class="form-control" required >
+      <div class="alert alert-danger" *ngIf="(addline1.touched && addline1.invalid)||(f.submitted && addline1.invalid)">
+        Address Line 1 is required.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="addline2"><i class="fa fa-address-card-o"></i> Address</label>
+      <input  [(ngModel)]="form.addline2"  #addline2="ngModel" name="addline2" id="addline2" placeholder="Line 2" type="text" class="form-control">
+       <!-- required > -->
+      <!-- <div class="alert alert-danger" *ngIf="addline2.touched && addline2.invalid">
+        Address Line 2 is required.
+      </div> -->
+    </div>
+    <div class="form-group">
+      <label for="city"><i class="fa fa-institution"></i> City</label>
+      <input  [(ngModel)]="form.city"  #city="ngModel" name="city" id="city"  type="text" class="form-control" required >
+      <div class="alert alert-danger" *ngIf="(city.touched && city.invalid)||(f.submitted && city.invalid)">
+        City is required.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="state">State</label>
+      <input  [(ngModel)]="form.state"  #state="ngModel" name="state" id="state" type="text" class="form-control" required >
+      <div class="alert alert-danger" *ngIf="(state.touched && state.invalid)||(f.submitted && state.invalid)">
+        State is required.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="zipcode">Zip</label>
+      <input  [(ngModel)]="form.zipcode"  #zipcode="ngModel" name="zipcode" id="zipcode"  type="number" class="form-control" required >
+      <div class="alert alert-danger" *ngIf="(zipcode.touched && zipcode.invalid)||(f.submitted && zipcode.invalid)">
+        Zip is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+    <button
+    class="btn btn-primary">place order</button>
+    </div>
+    <div class="alert alert-warning"  role="alert" *ngIf="f.submitted && isSaveFailed">
+      Order submit failed !<br />{{ errorMessage }}
+    </div>
+    </form>
+  </div>
+  <div class="col-sm-2"> </div>
+  <div class="col-sm-4 ">
+      <div class="card" >
+        <div class="card-body">
+          <h5 class="card-title">Order Summary</h5>
+          <ng-container *ngIf="cart">
+          <p class="card-text">You have {{cartItemCount}} items in your shopping cart</p>
+          <ul class="list-group list-group-flush">
+            <li *ngFor="let items of cart.products " class="list-group-item">
+             {{items.quantity}} x {{items.title}}
+             <div class="float-right">
+              {{getItemTotalPrice(items)|currency:'USD':true}}
+             </div>
+            </li>
+            <li class="list-group-item font-weight-bold">
+              Total
+              <div class="float-right">
+               {{totalPrice|currency:'USD':true}}
+              </div>
+             </li>
+          </ul>
+        </ng-container>
+        </div>
+      </div>
+
+
+
+  </div>
+</div>

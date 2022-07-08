@@ -1,0 +1,64 @@
+<div class="card" >
+  <div class="card-body">
+<h1 class="card-title">Shopping Cart</h1>
+<p>
+  You have {{cartItemCount}} items in your shopping cart.
+  <button
+ *ngIf="cartItemCount > 0"
+ (click)="clearCart()"
+   class="float-right btn btn-primary btn-sm">Clear Shopping Cart</button>
+</p>
+<ng-container *ngIf="cart">
+
+  <table class="table">
+    <thead>
+      <tr>
+         <th>Image</th>
+        <th>Product</th>
+        <th >Quantity</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tr *ngFor="let p of cart.products">
+      <td>
+        <div [style.backgroundImage]="'url('+p.imageurl+')'" class="thumbnail"></div>
+        <!-- <img [src]="p.imageurl" class="thumbnail"> -->
+      </td>
+      <td>{{p.title}}</td>
+      <td>
+         <!-- <div class="card-footer"> -->
+          <div class="row no-gutters">
+            <div class="col-4">
+              <button
+              (click)="removeFromCart(p)"
+              class="btn btn-secondary btn-block">-</button>
+            </div>
+            <div class="col-4 text-center">
+              {{p.quantity}}
+            </div>
+            <div class="col-4">
+              <button (click)="addToCart(p)" class="btn btn-secondary btn-block">+</button>
+            </div>
+          </div>
+
+      <!-- </div> -->
+    </td>
+      <!-- <td>{{p.quantity * p.price}}</td> -->
+      <td>{{getItemTotalPrice(p)|currency:'USD'}}</td>
+    </tr>
+    <tfoot>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>{{totalPrice|currency:'USD'}}</th>
+      </tr>
+    </tfoot>
+  </table>
+  <button
+  *ngIf="cartItemCount > 0"
+  routerLink="/check-out"
+  class="btn btn-primary">Check Out</button>
+</ng-container>
+</div>
+</div>
