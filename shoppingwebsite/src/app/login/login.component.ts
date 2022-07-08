@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
   loginWithGoogle(){
     let returnUrl=this.route.snapshot.queryParamMap.get('returnUrl')||'/';
     localStorage.setItem('returnUrl',returnUrl);
-    window.location.href= `${environment.apiUrl}/oauth2/authorize/google?redirect_uri=${environment.returnUrl}`;
+    window.location.href= `${environment.apiUrl}oauth2/authorize/google?redirect_uri=${environment.returnUrl}`;
   }
 
 }
