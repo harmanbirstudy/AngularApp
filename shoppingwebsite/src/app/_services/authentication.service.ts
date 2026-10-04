@@ -1,8 +1,7 @@
 import { JWTTokenHelper } from './../_helpers/JWTTokenHelper';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { TokenStorageService } from '../_services/token-storage.service';
@@ -13,7 +12,9 @@ const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthenticationService {
     // private currentUserSubject: BehaviorSubject<User>;
     // public currentUser: Observable<User>;

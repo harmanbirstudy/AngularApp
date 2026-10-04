@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { CurrencyPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { SpringbootservicesService } from '../springbootservices.service';
 import { Cart } from '../_models/cart';
 import { Product } from '../_models/product';
@@ -7,6 +9,7 @@ import { ShippingAdd } from '../_models/shippingadd';
 
 @Component({
   selector: 'app-check-out',
+  imports: [FormsModule, CurrencyPipe],
   templateUrl: './check-out.component.html',
   styleUrls: ['./check-out.component.scss']
 })

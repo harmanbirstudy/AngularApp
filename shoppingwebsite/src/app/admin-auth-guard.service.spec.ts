@@ -1,16 +1,19 @@
 import { TestBed } from '@angular/core/testing';
+import { CanActivateFn, provideRouter } from '@angular/router';
 
-import { AdminAuthGuardService } from './admin-auth-guard.service';
+import { adminAuthGuard } from './admin-auth-guard.service';
 
-describe('AdminAuthGuardService', () => {
-  let service: AdminAuthGuardService;
+describe('adminAuthGuard', () => {
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+      TestBed.runInInjectionContext(() => adminAuthGuard(...guardParameters));
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(AdminAuthGuardService);
+    TestBed.configureTestingModule({
+      providers: [provideRouter([])]
+    });
   });
 
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    expect(executeGuard).toBeTruthy();
   });
 });

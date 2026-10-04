@@ -1,9 +1,11 @@
 import { AuthenticationService } from './../_services/authentication.service';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { SpringbootservicesService } from '../springbootservices.service';
 
 @Component({
   selector: 'app-signup',
+  imports: [FormsModule],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })

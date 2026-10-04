@@ -1,102 +1,133 @@
 <div class="card" style="width: 50%;" >
   <div class="card-body">
-<h1 class="card-title">SignUp</h1>
-    <form
-      *ngIf="!isSuccessful"
-      name="form"
-      (ngSubmit)="f.form.valid && onSubmit()"
-      #f="ngForm"
-      novalidate
-    >
-      <div class="form-group">
-        <label for="username"><h6>Username</h6></label>
-        <input
-          type="text"
-          class="form-control"
-          name="username"
-          [(ngModel)]="form.username"
-          required
-          minlength="3"
-          maxlength="20"
-          #username="ngModel"
-          placeholder="username"
-        />
-        <div class="alert-danger" *ngIf="(username.touched && username.invalid)||(f.submitted && username.invalid)">
-          <div *ngIf="username.errors.required">Username is required</div>
-          <div *ngIf="username.errors.minlength">
-            Username must be at least 3 characters
-          </div>
-          <div *ngIf="username.errors.maxlength">
-            Username must be at most 20 characters
-          </div>
+    <h1 class="card-title">SignUp</h1>
+    @if (!isSuccessful) {
+      <form
+        name="form"
+        (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm"
+        novalidate
+        >
+        <div class="mb-3">
+          <label for="username"><h6>Username</h6></label>
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            [(ngModel)]="form.username"
+            required
+            minlength="3"
+            maxlength="20"
+            #username="ngModel"
+            placeholder="username"
+            />
+          @if ((username.touched && username.invalid)||(f.submitted && username.invalid)) {
+            <div class="alert-danger">
+              @if (username.errors?.['required']) {
+                <div>Username is required</div>
+              }
+              @if (username.errors?.['minlength']) {
+                <div>
+                  Username must be at least 3 characters
+                </div>
+              }
+              @if (username.errors?.['maxlength']) {
+                <div>
+                  Username must be at most 20 characters
+                </div>
+              }
+            </div>
+          }
         </div>
-      </div>
-      <div class="form-group">
-        <label for="email"><h6>Email</h6></label>
-        <input
-          type="email"
-          class="form-control"
-          name="email"
-          [(ngModel)]="form.email"
-          required
-          email
-          #email="ngModel"
-          placeholder="email"
-        />
-        <div class="alert-danger" *ngIf="(email.touched && email.invalid)||(f.submitted && email.invalid)">
-          <div *ngIf="email.errors.required">Email is required</div>
-          <div *ngIf="email.errors.email">
-            Email must be a valid email address
-          </div>
+        <div class="mb-3">
+          <label for="email"><h6>Email</h6></label>
+          <input
+            type="email"
+            class="form-control"
+            name="email"
+            [(ngModel)]="form.email"
+            required
+            email
+            #email="ngModel"
+            placeholder="email"
+            />
+          @if ((email.touched && email.invalid)||(f.submitted && email.invalid)) {
+            <div class="alert-danger">
+              @if (email.errors?.['required']) {
+                <div>Email is required</div>
+              }
+              @if (email.errors?.['email']) {
+                <div>
+                  Email must be a valid email address
+                </div>
+              }
+            </div>
+          }
         </div>
-      </div>
-      <div class="form-group">
-        <label for="password"><h6>Password</h6></label>
-        <input
-          type="password"
-          class="form-control"
-          name="password"
-          [(ngModel)]="form.password"
-          required
-          minlength="6"
-          #password="ngModel"
-          placeholder="password"
-        />
-        <div class="alert-danger" *ngIf="(password.touched && password.invalid)||(f.submitted && password.invalid)">
-          <div *ngIf="password.errors.required">Password is required</div>
-          <div *ngIf="password.errors.minlength">
-            Password must be at least 6 characters
-          </div>
+        <div class="mb-3">
+          <label for="password"><h6>Password</h6></label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            [(ngModel)]="form.password"
+            required
+            minlength="6"
+            #password="ngModel"
+            placeholder="password"
+            />
+          @if ((password.touched && password.invalid)||(f.submitted && password.invalid)) {
+            <div class="alert-danger">
+              @if (password.errors?.['required']) {
+                <div>Password is required</div>
+              }
+              @if (password.errors?.['minlength']) {
+                <div>
+                  Password must be at least 6 characters
+                </div>
+              }
+            </div>
+          }
         </div>
-      </div>
-      <div class="form-group">
-        <label for="matchingPassword"><h6>Password</h6></label>
-        <input
-          type="password"
-          class="form-control"
-          name="matchingPassword"
-          [(ngModel)]="form.matchingPassword"
-          required
-          minlength="6"
-          #matchingPassword="ngModel"
-          placeholder="Confirm Password"
-        />
-        <div class="alert-danger" *ngIf="(matchingPassword.touched && matchingPassword.invalid)||(f.submitted && matchingPassword.invalid)">
-          <div *ngIf="matchingPassword.errors.required">Matching Password is required</div>
-          <div *ngIf="matchingPassword.errors.minlength">
-            Password must be at least 6 characters
-          </div>
+        <div class="mb-3">
+          <label for="matchingPassword"><h6>Password</h6></label>
+          <input
+            type="password"
+            class="form-control"
+            name="matchingPassword"
+            [(ngModel)]="form.matchingPassword"
+            required
+            minlength="6"
+            #matchingPassword="ngModel"
+            placeholder="Confirm Password"
+            />
+          @if ((matchingPassword.touched && matchingPassword.invalid)||(f.submitted && matchingPassword.invalid)) {
+            <div class="alert-danger">
+              @if (matchingPassword.errors?.['required']) {
+                <div>Matching Password is required</div>
+              }
+              @if (matchingPassword.errors?.['minlength']) {
+                <div>
+                  Password must be at least 6 characters
+                </div>
+              }
+            </div>
+          }
         </div>
+        <div class="mb-3">
+          <button class="btn btn-primary">Sign Up</button>
+        </div>
+        @if (f.submitted && isSignUpFailed) {
+          <div class="alert alert-warning">
+            Signup failed!<br />{{ errorMessage }}
+          </div>
+        }
+      </form>
+    }
+    @if (isSuccessful) {
+      <div class="alert alert-success">
+        {{succesMessage}}
       </div>
-      <div class="form-group">
-        <button class="btn btn-primary">Sign Up</button>
-      </div>
-      <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
-        Signup failed!<br />{{ errorMessage }}
-      </div>
-    </form>
-    <div class="alert alert-success" *ngIf="isSuccessful">
-      {{succesMessage}}
-    </div>
+    }
   </div>
 </div>

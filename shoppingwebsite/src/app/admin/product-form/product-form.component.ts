@@ -1,10 +1,13 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { SpringbootservicesService } from 'src/app/springbootservices.service';
-import { Product } from 'src/app/_models/product';
+import { CurrencyPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { SpringbootservicesService } from '../../springbootservices.service';
+import { Product } from '../../_models/product';
 
 @Component({
   selector: 'app-product-form',
+  imports: [FormsModule, CurrencyPipe],
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss']
 })

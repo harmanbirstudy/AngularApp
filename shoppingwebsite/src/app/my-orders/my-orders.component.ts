@@ -1,19 +1,24 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { SpringbootservicesService } from '../springbootservices.service';
 import { AllUserOrders } from '../_models/orders';
 import { DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { Config } from 'datatables.net-dt';
+import { DataTableDirective } from '../_directives/datatable.directive';
 
 @Component({
   selector: 'app-my-orders',
+  imports: [RouterLink, DataTableDirective],
+  providers: [DatePipe],
   templateUrl: './my-orders.component.html',
   styleUrls: ['./my-orders.component.scss']
 })
 export class MyOrdersComponent implements OnInit,OnDestroy {
   errorMessage = '';
   userorders:AllUserOrders[];
-  dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<any> = new Subject<any>();
+  dtOptions: Config = {};
+  dtTrigger = new ReplaySubject<void>(1);
 
   constructor(private backendServices : SpringbootservicesService,private datePipe: DatePipe) {
     backendServices.getalluserorders().subscribe(
@@ -32,7 +37,7 @@ export class MyOrdersComponent implements OnInit,OnDestroy {
 
   ngOnInit(): void {
     this.dtOptions = {
-      pagingType: 'full_numbers',
+      layout: { bottomEnd: { paging: { type: 'full_numbers' } } },
       pageLength: 10
     };
     this.backendServices.navbarcollapse.next(false);
@@ -40,7 +45,7 @@ export class MyOrdersComponent implements OnInit,OnDestroy {
 
   ngOnDestroy(): void {
     // Do not forget to unsubscribe the event
-    this.dtTrigger.unsubscribe();
+    this.dtTrigger.complete();
   }
 
   transformDate(date:Date) {

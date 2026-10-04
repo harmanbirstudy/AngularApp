@@ -1,8 +1,12 @@
 import { User } from '../_models/user';
-import { Injectable, NgModule } from '@angular/core';
-//import  jwt_decode from "jwt-decode";
-//import jwt_decode, { JwtPayload } from 'jwt-decode'
-import jwtDecode, { JwtPayload } from "jwt-decode";
+import { Injectable } from '@angular/core';
+import { jwtDecode, JwtPayload } from "jwt-decode";
+
+interface AppJwtPayload extends JwtPayload {
+  NAME?: string;
+  IMAGEURL?: string;
+  ROLE?: any;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -13,16 +17,13 @@ export class JWTTokenHelper{
   DecodeToken(token: any): User {
     console.log(token);
     try {
-      //const data = decode(token);
-   // var decodedtoken= jwt_decode(token);
-  // console.log(token);
-    const decodedtoken = jwtDecode(token);
+    const decodedtoken = jwtDecode<AppJwtPayload>(token);
     console.log(decodedtoken);
     const user : User ={
-      id: decodedtoken['sub'],
-      name: decodedtoken['NAME'],
-      imageurl: decodedtoken['IMAGEURL'],
-      role: decodedtoken['ROLE'],
+      id: decodedtoken.sub,
+      name: decodedtoken.NAME,
+      imageurl: decodedtoken.IMAGEURL,
+      role: decodedtoken.ROLE,
      // token: token
     }
     console.log(user);

@@ -1,19 +1,24 @@
 import { AllOrders } from './../../_models/orders';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { DatePipe } from '@angular/common';
-import { SpringbootservicesService } from 'src/app/springbootservices.service';
+import { RouterLink } from '@angular/router';
+import { Config } from 'datatables.net-dt';
+import { DataTableDirective } from '../../_directives/datatable.directive';
+import { SpringbootservicesService } from '../../springbootservices.service';
 
 @Component({
   selector: 'app-admin-orders',
+  imports: [RouterLink, DataTableDirective],
+  providers: [DatePipe],
   templateUrl: './admin-orders.component.html',
   styleUrls: ['./admin-orders.component.scss']
 })
 export class AdminOrdersComponent implements OnInit,OnDestroy {
   errorMessage = '';
   orders:AllOrders[];
-  dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<any> = new Subject<any>();
+  dtOptions: Config = {};
+  dtTrigger = new ReplaySubject<void>(1);
 
   constructor(private backendServices : SpringbootservicesService,private datePipe: DatePipe) {
     backendServices.getallorders().subscribe(
@@ -32,14 +37,14 @@ export class AdminOrdersComponent implements OnInit,OnDestroy {
   ngOnInit(): void {
     this.backendServices.navbarcollapse.next(false);
     this.dtOptions = {
-      pagingType: 'full_numbers',
+      layout: { bottomEnd: { paging: { type: 'full_numbers' } } },
       pageLength: 10
     };
   }
 
   ngOnDestroy(): void {
     // Do not forget to unsubscribe the event
-    this.dtTrigger.unsubscribe();
+    this.dtTrigger.complete();
   }
 
   transformDate(date:Date) {

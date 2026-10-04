@@ -1,7 +1,7 @@
-import { BsNavbarComponent } from './../bs-navbar/bs-navbar.component';
 //import { Product } from 'src/app/_models/product';
-import { ActivatedRoute, Router,NavigationEnd } from '@angular/router';
-import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
 import { SpringbootservicesService } from '../springbootservices.service';
 import { Product } from '../_models/product';
 import { Category } from '../_models/category';
@@ -10,6 +10,7 @@ import { Cart } from '../_models/cart';
 
 @Component({
   selector: 'app-products',
+  imports: [RouterLink, CurrencyPipe],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })

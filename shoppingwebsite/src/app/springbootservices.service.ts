@@ -1,8 +1,7 @@
 import { ShippingAdd } from './_models/shippingadd';
-import { map, share, shareReplay } from 'rxjs/operators';
-import { HttpClient , HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from '../environments/environment';
 import { Product } from './_models/product';
 import { Category } from './_models/category';
@@ -16,7 +15,9 @@ const httpOptionstext = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json','responseType': 'text' })
 };
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SpringbootservicesService {
  cartsuject: Subject<Cart>;
  navbarcollapse: Subject<boolean>;

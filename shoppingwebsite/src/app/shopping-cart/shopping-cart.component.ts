@@ -1,10 +1,13 @@
 import { Product } from './../_models/product';
 import { Component, OnInit } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { SpringbootservicesService } from '../springbootservices.service';
 import { Cart } from '../_models/cart';
 
 @Component({
   selector: 'app-shopping-cart',
+  imports: [RouterLink, CurrencyPipe],
   templateUrl: './shopping-cart.component.html',
   styleUrls: ['./shopping-cart.component.scss']
 })

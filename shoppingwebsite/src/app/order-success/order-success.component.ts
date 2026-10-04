@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { CurrencyPipe } from '@angular/common';
 import { SpringbootservicesService } from '../springbootservices.service';
 import { OrderProducts, Orders } from '../_models/orders';
 
 @Component({
   selector: 'app-order-success',
+  imports: [CurrencyPipe],
   templateUrl: './order-success.component.html',
   styleUrls: ['./order-success.component.scss']
 })

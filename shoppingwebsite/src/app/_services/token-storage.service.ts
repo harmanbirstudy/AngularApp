@@ -1,10 +1,10 @@
 import { User } from './../_models/user';
 import { Injectable } from '@angular/core';
-import { BOOL_TYPE } from '@angular/compiler/src/output/output_ast';
-import { Observable } from 'rxjs';
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TokenStorageService {
   constructor() { }
   signOut() {

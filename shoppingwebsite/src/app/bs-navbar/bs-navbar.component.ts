@@ -6,11 +6,14 @@ import { TokenStorageService } from '../_services/token-storage.service';
 import { AuthenticationService } from '../_services/authentication.service';
 import { Cart } from '../_models/cart';
 import { SpringbootservicesService } from '../springbootservices.service';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { RouterLink } from '@angular/router';
+import { NgbCollapseModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 //import { ProductsComponent } from '../products/products.component';
 
 @Component({
   selector: 'bs-navbar',
+  imports: [RouterLink, NgbCollapseModule, NgbDropdownModule],
   templateUrl: './bs-navbar.component.html',
   styleUrls: ['./bs-navbar.component.scss']
 })
