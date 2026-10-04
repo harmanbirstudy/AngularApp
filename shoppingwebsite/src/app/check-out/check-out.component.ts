@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,7 @@ import { Product } from '../_models/product';
 import { ShippingAdd } from '../_models/shippingadd';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-check-out',
   imports: [FormsModule, CurrencyPipe],
   templateUrl: './check-out.component.html',

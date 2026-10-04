@@ -1,6 +1,6 @@
 //import { Product } from 'src/app/_models/product';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { SpringbootservicesService } from '../springbootservices.service';
 import { Product } from '../_models/product';
@@ -9,6 +9,7 @@ import { Cart } from '../_models/cart';
 
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-products',
   imports: [RouterLink, CurrencyPipe],
   templateUrl: './products.component.html',

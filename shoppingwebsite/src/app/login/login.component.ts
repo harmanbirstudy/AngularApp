@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { JWTTokenHelper } from '../_helpers/JWTTokenHelper';
 import { User } from '../_models/user';
 import { TokenStorageService } from '../_services/token-storage.service';
@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { SpringbootservicesService } from '../springbootservices.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-login',
   imports: [FormsModule],
   templateUrl: './login.component.html',

@@ -1,11 +1,12 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SpringbootservicesService } from '../../springbootservices.service';
 import { Product } from '../../_models/product';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-product-form',
   imports: [FormsModule, CurrencyPipe],
   templateUrl: './product-form.component.html',

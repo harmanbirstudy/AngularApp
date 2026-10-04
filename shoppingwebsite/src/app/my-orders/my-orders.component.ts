@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { SpringbootservicesService } from '../springbootservices.service';
 import { AllUserOrders } from '../_models/orders';
@@ -8,6 +8,7 @@ import { Config } from 'datatables.net-dt';
 import { DataTableDirective } from '../_directives/datatable.directive';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-my-orders',
   imports: [RouterLink, DataTableDirective],
   providers: [DatePipe],

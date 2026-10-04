@@ -1,9 +1,10 @@
 import { AuthenticationService } from './../_services/authentication.service';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SpringbootservicesService } from '../springbootservices.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-signup',
   imports: [FormsModule],
   templateUrl: './signup.component.html',

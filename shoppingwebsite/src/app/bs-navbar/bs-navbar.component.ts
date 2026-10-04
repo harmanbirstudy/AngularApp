@@ -1,6 +1,6 @@
 import { User } from './../_models/user';
 //import { UserService } from './../_services/user.service';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { TokenStorageService } from '../_services/token-storage.service';
 //import { BehaviorSubject, Observable } from 'rxjs';
 import { AuthenticationService } from '../_services/authentication.service';
@@ -12,6 +12,7 @@ import { NgbCollapseModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap
 //import { ProductsComponent } from '../products/products.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'bs-navbar',
   imports: [RouterLink, NgbCollapseModule, NgbDropdownModule],
   templateUrl: './bs-navbar.component.html',

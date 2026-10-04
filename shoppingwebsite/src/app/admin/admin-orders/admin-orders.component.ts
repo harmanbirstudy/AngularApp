@@ -1,5 +1,5 @@
 import { AllOrders } from './../../_models/orders';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -8,6 +8,7 @@ import { DataTableDirective } from '../../_directives/datatable.directive';
 import { SpringbootservicesService } from '../../springbootservices.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-admin-orders',
   imports: [RouterLink, DataTableDirective],
   providers: [DatePipe],

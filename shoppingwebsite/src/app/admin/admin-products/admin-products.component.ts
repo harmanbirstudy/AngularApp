@@ -1,5 +1,5 @@
 import { Product } from './../../_models/product';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { SpringbootservicesService } from '../../springbootservices.service';
 import { ReplaySubject } from 'rxjs';
 import { CurrencyPipe } from '@angular/common';
@@ -8,6 +8,7 @@ import { Config } from 'datatables.net-dt';
 import { DataTableDirective } from '../../_directives/datatable.directive';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-admin-products',
   imports: [CurrencyPipe, RouterLink, DataTableDirective],
   templateUrl: './admin-products.component.html',
