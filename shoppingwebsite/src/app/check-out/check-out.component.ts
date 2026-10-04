@@ -6,11 +6,14 @@ import { SpringbootservicesService } from '../springbootservices.service';
 import { Cart } from '../_models/cart';
 import { Product } from '../_models/product';
 import { ShippingAdd } from '../_models/shippingadd';
+import { NgbTypeahead, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, catchError, debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
+import { AddressAutocompleteService, AddressSuggestion } from '../_services/address-autocomplete.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-check-out',
-  imports: [FormsModule, CurrencyPipe],
+  imports: [FormsModule, CurrencyPipe, NgbTypeahead],
   templateUrl: './check-out.component.html',
   styleUrls: ['./check-out.component.scss']
 })
@@ -28,13 +31,33 @@ export class CheckOutComponent implements OnInit {
   cart:Cart;
   cartItemCount:number =0;
   totalPrice:number=0;
-  constructor(private backendServices : SpringbootservicesService,private routes:Router,private route:ActivatedRoute) {
+  constructor(private backendServices : SpringbootservicesService,private routes:Router,private route:ActivatedRoute,private addressService: AddressAutocompleteService) {
     this.getCart();
    }
 
   ngOnInit(): void {
 
   }
+  searchAddress = (text$: Observable<string>): Observable<AddressSuggestion[]> =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(term => term.trim().length < 3 ? of([]) :
+        this.addressService.search(term).pipe(catchError(() => of([]))))
+    );
+
+  formatSuggestion = (s: AddressSuggestion) => s.label;
+
+  onAddressSelect(event: NgbTypeaheadSelectItemEvent<AddressSuggestion>) {
+    // keep addline1 a plain string and fill the rest of the form from the suggestion
+    event.preventDefault();
+    const s = event.item;
+    this.form.addline1 = s.addline1;
+    this.form.city = s.city;
+    this.form.state = s.state;
+    this.form.zipcode = s.zipcode;
+  }
+
   getItemTotalPrice(product: Product){
     return product.quantity*product.price;
    }
