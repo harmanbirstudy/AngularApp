@@ -1,27 +1,23 @@
 # Shoppingwebsite
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.15.
+Angular 22 front end for the Spring Boot shopping backend (expected at `http://localhost:8080/` in development, see `src/environments/environment.development.ts`).
+
+## Requirements
+
+- Node.js `^22.22.3`, `^24.15.0` or `>=26` (Angular 22 requirement)
+- macOS 14+ for the default native Sass compiler. On older macOS (e.g. 13 Ventura) the build hangs with
+  `VM initialization failed: Current Mac OS X version ... is lower than minimum supported version 14.0`.
+  Use the pure-JavaScript Sass compiler instead by setting `NG_BUILD_SASS_EMBEDDED=0`, e.g.
+  `NG_BUILD_SASS_EMBEDDED=0 npm start`.
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Run `npm start` (`ng serve`) and navigate to `http://localhost:4200/`.
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `npm run build` (`ng build`). Production output goes to `dist/shoppingwebsite`.
 
 ## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Run `npm test` (`ng test`) to execute the unit tests with [Vitest](https://vitest.dev).

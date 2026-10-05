@@ -1,10 +1,16 @@
 import { Product } from './../../_models/product';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { SpringbootservicesService } from 'src/app/springbootservices.service';
-import { Subject } from 'rxjs';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { SpringbootservicesService } from '../../springbootservices.service';
+import { ReplaySubject } from 'rxjs';
+import { CurrencyPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { Config } from 'datatables.net-dt';
+import { DataTableDirective } from '../../_directives/datatable.directive';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-admin-products',
+  imports: [CurrencyPipe, RouterLink, DataTableDirective],
   templateUrl: './admin-products.component.html',
   styleUrls: ['./admin-products.component.scss']
 })
@@ -13,8 +19,8 @@ export class AdminProductsComponent implements OnInit,OnDestroy{
   //filteredproducts: Product[];
   //listArray: Mattab
   errorMessage = '';
-  dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<any> = new Subject<any>();
+  dtOptions: Config = {};
+  dtTrigger = new ReplaySubject<void>(1);
 
   constructor(private backendServices : SpringbootservicesService) {
     //this.products=backendServices.getProductList();
@@ -35,7 +41,7 @@ export class AdminProductsComponent implements OnInit,OnDestroy{
 
   ngOnInit(): void {
     this.dtOptions = {
-      pagingType: 'full_numbers',
+      layout: { bottomEnd: { paging: { type: 'full_numbers' } } },
       pageLength: 10
     };
     this.backendServices.navbarcollapse.next(false);
@@ -46,6 +52,6 @@ export class AdminProductsComponent implements OnInit,OnDestroy{
   // }
   ngOnDestroy(): void {
     // Do not forget to unsubscribe the event
-    this.dtTrigger.unsubscribe();
+    this.dtTrigger.complete();
   }
 }

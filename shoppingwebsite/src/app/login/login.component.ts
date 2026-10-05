@@ -1,15 +1,17 @@
-import { Role } from './../_models/role';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { JWTTokenHelper } from '../_helpers/JWTTokenHelper';
 import { User } from '../_models/user';
 import { TokenStorageService } from '../_services/token-storage.service';
 import { AuthenticationService } from './../_services/authentication.service';
 import { environment } from '../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { SpringbootservicesService } from '../springbootservices.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-login',
+  imports: [FormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
