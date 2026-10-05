@@ -26,18 +26,18 @@ Checkout, order and admin pages are protected by route guards (`authGuard`, `adm
 
 | Piece            | Where                                   | Notes |
 |------------------|-----------------------------------------|-------|
-| REST API calls   | `src/app/springbootservices.service.ts`, `src/app/_services/` | Products, categories, cart, orders, login/signup |
-| Auth token       | `src/app/_helpers/JwtInterceptor.ts`     | Adds `Authorization: Bearer <jwt>` to backend requests |
-| Google login     | `src/app/login/login.component.ts`       | Redirects to the backend's `/oauth2/authorize/google` |
+| REST API calls   | `shoppingwebsite/src/app/springbootservices.service.ts`, `shoppingwebsite/src/app/_services/` | Products, categories, cart, orders, login/signup |
+| Auth token       | `shoppingwebsite/src/app/_helpers/JwtInterceptor.ts`     | Adds `Authorization: Bearer <jwt>` to backend requests |
+| Google login     | `shoppingwebsite/src/app/login/login.component.ts`       | Redirects to the backend's `/oauth2/authorize/google` |
 | Cart id          | browser `localStorage` key `cartId`       | Created on the first "Add to Cart", cleared after an order is placed |
-| Data tables      | `src/app/_directives/datatable.directive.ts` | Small wrapper around DataTables 3 for the admin and order lists |
+| Data tables      | `shoppingwebsite/src/app/_directives/datatable.directive.ts` | Small wrapper around DataTables 3 for the admin and order lists |
 
 The backend URL comes from the environment files:
 
 | File                                        | Used by                    | `apiUrl` |
 |---------------------------------------------|----------------------------|----------|
-| `src/environments/environment.development.ts` | `ng serve`, development builds | `http://localhost:8080/` |
-| `src/environments/environment.ts`             | production build (`ng build`) | `""` (same origin, served by Spring Boot) |
+| `shoppingwebsite/src/environments/environment.development.ts` | `ng serve`, development builds | `http://localhost:8080/` |
+| `shoppingwebsite/src/environments/environment.ts`             | production build (`ng build`) | `""` (same origin, served by Spring Boot) |
 
 ## Versions
 
@@ -57,7 +57,7 @@ The project is developed and tested with these versions:
 | DataTables            | 3.1      |
 | Vitest (unit tests)   | 5.x      |
 
-Angular 22 requires Node.js `^22.22.3`, `^24.15.0` or `>=26` (also set in `package.json` `engines`).
+Angular 22 requires Node.js `^22.22.3`, `^24.15.0` or `>=26` (also set in `shoppingwebsite/package.json` `engines`).
 Check yours with `node -v` and `npm -v`.
 
 ### macOS 13 (Ventura) and older
@@ -73,7 +73,10 @@ NG_BUILD_SASS_EMBEDDED=0 npm run build
 
 ## Getting started
 
+The Angular project lives in the `shoppingwebsite/` folder. Run all `npm` commands from there:
+
 ```bash
+cd shoppingwebsite
 npm install
 npm start
 ```
@@ -85,12 +88,14 @@ environment variables.
 ## Build and deploy to Spring Boot
 
 ```bash
+cd shoppingwebsite
 npm run build
 ```
 
-Production output goes to `dist/shoppingwebsite/`. Spring Boot serves the app from
-`src/main/resources/static/`, so copy the **contents** of `dist/shoppingwebsite/browser/`
-(not the `browser` folder itself) into that folder, and remove the old build files first:
+Production output goes to `shoppingwebsite/dist/shoppingwebsite/`. Spring Boot serves the app from
+`shoppingwebsite/src/main/resources/static/`, so copy the **contents** of `shoppingwebsite/dist/shoppingwebsite/browser/`
+(not the `browser` folder itself) into that folder, and remove the old build files first.
+Run this from the `shoppingwebsite/` folder:
 
 ```bash
 STATIC=../../../SpringBootApplication/shoppingwebsite/src/main/resources/static   # adjust to your checkout
@@ -133,9 +138,9 @@ checkout keeps working.
 
 | File | Role |
 |------|------|
-| `src/app/_services/address-autocomplete.service.ts` | Calls Photon and Zippopotam, turns results into `AddressSuggestion` objects |
-| `src/app/check-out/check-out.component.ts` | `searchAddress` (debounce + search), `onAddressSelect` (fills the form) |
-| `src/app/check-out/check-out.component.html` | `ngbTypeahead` from ng-bootstrap on the `addline1` input |
+| `shoppingwebsite/src/app/_services/address-autocomplete.service.ts` | Calls Photon and Zippopotam, turns results into `AddressSuggestion` objects |
+| `shoppingwebsite/src/app/check-out/check-out.component.ts` | `searchAddress` (debounce + search), `onAddressSelect` (fills the form) |
+| `shoppingwebsite/src/app/check-out/check-out.component.html` | `ngbTypeahead` from ng-bootstrap on the `addline1` input |
 
 The service sends its requests through `HttpBackend`, which skips the app's HTTP interceptors.
 That keeps the user's JWT from being sent to these third-party APIs.
@@ -158,4 +163,4 @@ curl 'https://api.zippopotam.us/us/76244'
 
 ## Running unit tests
 
-Run `npm test` (`ng test`) to execute the unit tests with [Vitest](https://vitest.dev).
+From the `shoppingwebsite/` folder, run `npm test` (`ng test`) to execute the unit tests with [Vitest](https://vitest.dev).
