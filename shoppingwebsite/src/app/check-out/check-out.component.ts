@@ -7,7 +7,7 @@ import { Cart } from '../_models/cart';
 import { Product } from '../_models/product';
 import { ShippingAdd } from '../_models/shippingadd';
 import { NgbTypeahead, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, catchError, debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
+import { Observable, catchError, debounceTime, distinctUntilChanged, of, switchMap, tap } from 'rxjs';
 import { AddressAutocompleteService, AddressSuggestion } from '../_services/address-autocomplete.service';
 
 @Component({
@@ -31,6 +31,7 @@ export class CheckOutComponent implements OnInit {
   cart:Cart;
   cartItemCount:number =0;
   totalPrice:number=0;
+  searchingAddress = false;
   constructor(private backendServices : SpringbootservicesService,private routes:Router,private route:ActivatedRoute,private addressService: AddressAutocompleteService) {
     this.getCart();
    }
@@ -42,8 +43,10 @@ export class CheckOutComponent implements OnInit {
     text$.pipe(
       debounceTime(300),
       distinctUntilChanged(),
+      tap(term => this.searchingAddress = term.trim().length >= 3),
       switchMap(term => term.trim().length < 3 ? of([]) :
-        this.addressService.search(term).pipe(catchError(() => of([]))))
+        this.addressService.search(term).pipe(catchError(() => of([])))),
+      tap(() => this.searchingAddress = false)
     );
 
   formatSuggestion = (s: AddressSuggestion) => s.label;
