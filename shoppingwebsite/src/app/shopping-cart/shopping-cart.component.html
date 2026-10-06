@@ -64,3 +64,8 @@
   }
 </div>
 </div>
+
+<!-- personalised recommendations (RecommedationSystem), shown once the cart is loaded -->
+@if (cart) {
+  <app-product-recommendations [excludeProductIds]="cartProductIds" (addToCart)="addRecommendedToCart($event)" />
+}
