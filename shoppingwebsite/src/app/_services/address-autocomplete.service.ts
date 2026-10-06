@@ -1,7 +1,7 @@
 import { HttpBackend, HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, forkJoin, map, of, shareReplay, switchMap } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { AppConfigService } from './app-config.service';
 
 // Fast address autocomplete, free tier with an API key: https://www.geoapify.com
 const GEOAPIFY_URL = 'https://api.geoapify.com/v1/geocode/autocomplete';
@@ -31,7 +31,7 @@ export class AddressAutocompleteService {
   private zipCityCache = new Map<string, Observable<string>>();
 
   // HttpBackend skips the interceptors, so the JWT is never sent to the third-party APIs
-  constructor(handler: HttpBackend) {
+  constructor(handler: HttpBackend, private appConfig: AppConfigService) {
     this.http = new HttpClient(handler);
   }
 
@@ -51,7 +51,7 @@ export class AddressAutocompleteService {
 
   // Geoapify when a key is configured, Photon otherwise or when Geoapify fails (bad key, daily limit)
   private searchProviders(query: string): Observable<AddressSuggestion[]> {
-    if (!environment.geoapifyApiKey) {
+    if (!this.appConfig.geoapifyApiKey) {
       return this.searchPhoton(query);
     }
     return this.searchGeoapify(query).pipe(
@@ -76,7 +76,7 @@ export class AddressAutocompleteService {
       .set('limit', 5)
       .set('lang', 'en')
       .set('format', 'json')
-      .set('apiKey', environment.geoapifyApiKey);
+      .set('apiKey', this.appConfig.geoapifyApiKey);
 
     return this.http.get<any>(GEOAPIFY_URL, { params }).pipe(
       map(res => (res.results || []).map((r: any) => this.withLabel({

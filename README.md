@@ -39,6 +39,25 @@ The backend URL comes from the environment files:
 | `shoppingwebsite/src/environments/environment.development.ts` | `ng serve`, development builds | `http://localhost:8080/` |
 | `shoppingwebsite/src/environments/environment.ts`             | production build (`ng build`) | `""` (same origin, served by Spring Boot) |
 
+### Runtime settings (no rebuild needed)
+
+Two settings are loaded when the app starts, so they can be changed without rebuilding Angular:
+
+| Setting                | Spring Boot environment variable | Default |
+|------------------------|----------------------------------|---------|
+| `recommendationApiUrl` | `RECOMMENDATION_API_URL`         | `http://localhost:3001/` |
+| `geoapifyApiKey`       | `GEOAPIFY_API_KEY`               | empty (address search uses Photon) |
+
+On startup, `AppConfigService` (`shoppingwebsite/src/app/_services/app-config.service.ts`) calls the
+backend's `GET /app-config`, which returns these values from the Spring Boot environment variables.
+To change them, set the variables where Spring Boot runs and restart it. The Angular build in
+`static/` stays the same.
+
+If the backend can't be reached within 3 seconds, or returns an empty value, the app uses the
+values from `environment.ts` / `environment.development.ts` instead.
+
+Only put values here that are safe to show in the browser: anyone can open `/app-config`.
+
 ## Versions
 
 The project is developed and tested with these versions:
@@ -125,9 +144,9 @@ It uses these free APIs:
 Without a key the app works, but uses Photon, which is slow.
 
 1. Sign up at <https://myprojects.geoapify.com/> and create a project. Copy its API key.
-2. Put the key in `geoapifyApiKey` in both
-   `shoppingwebsite/src/environments/environment.development.ts` and
-   `shoppingwebsite/src/environments/environment.ts`.
+2. Set it as the `GEOAPIFY_API_KEY` environment variable where Spring Boot runs (for example in
+   its `.env` file) and restart Spring Boot. No Angular rebuild is needed; see
+   [Runtime settings](#runtime-settings-no-rebuild-needed). Don't commit the key.
 3. In the Geoapify dashboard, restrict the key to your site's address (e.g. `localhost:4200`,
    `localhost:8080`, your production domain). The key is sent from the browser, so anyone can
    see it; the restriction stops other sites from using up your daily limit.

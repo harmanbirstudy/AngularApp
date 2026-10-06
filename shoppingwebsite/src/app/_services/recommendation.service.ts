@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map, switchMap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Recommendation, RecommendationResponse } from '../_models/recommendation';
+import { AppConfigService } from './app-config.service';
 
 @Injectable({ providedIn: 'root' })
 export class RecommendationService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private appConfig: AppConfigService) { }
 
   // The JWT has no email claim, so read it from the Spring Boot user profile
   getCurrentUserEmail(): Observable<string> {
@@ -17,7 +18,7 @@ export class RecommendationService {
 
   getRecommendations(email: string, excludeProductIds: string[] = []): Observable<Recommendation[]> {
     return this.http
-      .post<RecommendationResponse>(`${environment.recommendationApiUrl}api/recommendations`, {
+      .post<RecommendationResponse>(`${this.appConfig.recommendationApiUrl}api/recommendations`, {
         email,
         excludeProductIds
       })
