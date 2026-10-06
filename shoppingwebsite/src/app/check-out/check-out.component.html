@@ -17,6 +17,9 @@
       </div>
       <div class="mb-3">
         <label for="addline1"><i class="fa-regular fa-address-card"></i> Address</label>
+        @if (searchingAddress) {
+          <small class="text-muted ms-2"><span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Searching…</small>
+        }
         <input  [(ngModel)]="form.addline1"  #addline1="ngModel" name="addline1" id="addline1" placeholder="Start typing your address" type="text" class="form-control" autocomplete="off"
           [ngbTypeahead]="searchAddress" [resultFormatter]="formatSuggestion" (selectItem)="onAddressSelect($event)" required >
         @if ((addline1.touched && addline1.invalid)||(f.submitted && addline1.invalid)) {

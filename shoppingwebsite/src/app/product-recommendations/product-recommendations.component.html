@@ -1,0 +1,41 @@
+@if (loading() || recommendations().length) {
+  <section class="recommendations" aria-labelledby="recommendations-heading">
+    <div class="d-flex align-items-center justify-content-between mb-2">
+      <h4 id="recommendations-heading" class="mb-0">Recommended for you</h4>
+      @if (recommendations().length) {
+        <div class="btn-group">
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="scroll(-1)" aria-label="Scroll recommendations left">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="scroll(1)" aria-label="Scroll recommendations right">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      }
+    </div>
+
+    @if (loading()) {
+      <p class="text-muted">
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        Finding products you might like...
+      </p>
+    } @else {
+      <!-- sorted by relevance: most relevant first -->
+      <div #scroller class="rec-scroller" tabindex="0" aria-label="Recommended products">
+        @for (p of recommendations(); track p.productid) {
+          <div class="card rec-card">
+            @if (p.imageurl) {
+              <img class="card-img-top" [src]="p.imageurl" [alt]="p.title" loading="lazy">
+            }
+            <div class="card-body">
+              <h6 class="card-title">{{p.title}}</h6>
+              <p class="card-text fw-bold mb-1">{{p.price | currency:'USD'}}</p>
+              <p class="card-text small text-muted">{{p.reason}}</p>
+              <button type="button" class="btn btn-secondary btn-sm w-100" (click)="add(p)">Add to Cart</button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </section>
+}

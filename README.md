@@ -39,6 +39,25 @@ The backend URL comes from the environment files:
 | `shoppingwebsite/src/environments/environment.development.ts` | `ng serve`, development builds | `http://localhost:8080/` |
 | `shoppingwebsite/src/environments/environment.ts`             | production build (`ng build`) | `""` (same origin, served by Spring Boot) |
 
+### Runtime settings (no rebuild needed)
+
+Two settings are loaded when the app starts, so they can be changed without rebuilding Angular:
+
+| Setting                | Spring Boot environment variable | Default |
+|------------------------|----------------------------------|---------|
+| `recommendationApiUrl` | `RECOMMENDATION_API_URL`         | `http://localhost:3001/` |
+| `geoapifyApiKey`       | `GEOAPIFY_API_KEY`               | empty (address search uses Photon) |
+
+On startup, `AppConfigService` (`shoppingwebsite/src/app/_services/app-config.service.ts`) calls the
+backend's `GET /app-config`, which returns these values from the Spring Boot environment variables.
+To change them, set the variables where Spring Boot runs and restart it. The Angular build in
+`static/` stays the same.
+
+If the backend can't be reached within 3 seconds, or returns an empty value, the app uses the
+values from `environment.ts` / `environment.development.ts` instead.
+
+Only put values here that are safe to show in the browser: anyone can open `/app-config`.
+
 ## Versions
 
 The project is developed and tested with these versions:
@@ -112,20 +131,39 @@ commit the new files together with the updated `index.html`. Otherwise the page 
 On the checkout page, the **Address (Line 1)** field suggests real addresses as you type,
 and picking one fills in Line 1, City, State and Zip. Line 2 is left for the user.
 
-It uses two free public APIs. Neither needs an API key, an account, or any setup:
+It uses these free APIs:
 
-| API | What it's used for |
-|-----|--------------------|
-| [Photon](https://photon.komoot.io) (by komoot, OpenStreetMap data) | Address search: house number, street, city, state, zip, country |
-| [Zippopotam.us](https://www.zippopotam.us) | City lookup from the zip code, used only when OpenStreetMap has no city for the address |
+| API | What it's used for | Key needed? |
+|-----|--------------------|-------------|
+| [Geoapify](https://www.geoapify.com) | Address search, fast (usually under 0.3s). Used when a key is set | Yes, free (3,000 searches/day) |
+| [Photon](https://photon.komoot.io) (by komoot, OpenStreetMap data) | Address search when no Geoapify key is set, or when Geoapify fails. Slow: often 3–4s per search | No |
+| [Zippopotam.us](https://www.zippopotam.us) | City lookup from the zip code, used only when the address has no city | No |
+
+### Turning on Geoapify (recommended)
+
+Without a key the app works, but uses Photon, which is slow.
+
+1. Sign up at <https://myprojects.geoapify.com/> and create a project. Copy its API key.
+2. Set it as the `GEOAPIFY_API_KEY` environment variable where Spring Boot runs (for example in
+   its `.env` file) and restart Spring Boot. No Angular rebuild is needed; see
+   [Runtime settings](#runtime-settings-no-rebuild-needed). Don't commit the key.
+3. In the Geoapify dashboard, restrict the key to your site's address (e.g. `localhost:4200`,
+   `localhost:8080`, your production domain). The key is sent from the browser, so anyone can
+   see it; the restriction stops other sites from using up your daily limit.
+
+If the key is wrong or the daily limit is reached, the app automatically falls back to Photon.
 
 ### How it works
 
-1. After at least **3 characters** and a **300 ms** pause in typing, the app calls Photon:
-   `https://photon.komoot.io/api/?q=<text>&limit=5&lang=en&layer=house&layer=street`
+1. After at least **3 characters** and a **300 ms** pause in typing, the app shows
+   "Searching…" next to the label and calls Geoapify (or Photon, if no key is set):
+   - `https://api.geoapify.com/v1/geocode/autocomplete?text=<text>&limit=5&lang=en&format=json&apiKey=<key>`
+   - `https://photon.komoot.io/api/?q=<text>&limit=5&lang=en&layer=house&layer=street`
+
+   The last 50 searches are cached in memory, so typing the same text again is instant.
 2. Each result becomes a suggestion like
    `12972 Steadman Farms Drive, Keller, Texas, 76244, United States`.
-3. Some addresses have no city in OpenStreetMap (common in newer suburbs, e.g. it only knows
+3. Some addresses have no city in the map data (common in newer suburbs, e.g. it only knows
    `Tarrant County, Texas, 76244`). For those, the app looks up the city from the zip code:
    `https://api.zippopotam.us/us/76244` → `Keller`. Each zip is looked up once and cached.
 4. Selecting a suggestion fills the form fields. Users can also ignore the suggestions and
@@ -138,7 +176,7 @@ checkout keeps working.
 
 | File | Role |
 |------|------|
-| `shoppingwebsite/src/app/_services/address-autocomplete.service.ts` | Calls Photon and Zippopotam, turns results into `AddressSuggestion` objects |
+| `shoppingwebsite/src/app/_services/address-autocomplete.service.ts` | Calls Geoapify / Photon and Zippopotam, caches searches, turns results into `AddressSuggestion` objects |
 | `shoppingwebsite/src/app/check-out/check-out.component.ts` | `searchAddress` (debounce + search), `onAddressSelect` (fills the form) |
 | `shoppingwebsite/src/app/check-out/check-out.component.html` | `ngbTypeahead` from ng-bootstrap on the `addline1` input |
 
@@ -158,8 +196,8 @@ curl 'https://api.zippopotam.us/us/76244'
 - The city from a zip code is the postal (mailing) city. For a zip that covers several towns,
   it is the main one.
 - The Zip input is `type="number"`, so postcodes with letters (Canada, UK) don't fit.
-- Photon is a free public service with fair-use limits. For heavy production traffic,
-  consider hosting your own Photon instance or using a paid geocoder.
+- Geoapify's free tier allows 3,000 searches per day. Photon is a free public service with
+  fair-use limits. For heavy production traffic, use a paid Geoapify plan or host your own Photon.
 
 ## Running unit tests
 

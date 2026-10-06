@@ -4,11 +4,13 @@ import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SpringbootservicesService } from '../springbootservices.service';
 import { Cart } from '../_models/cart';
+import { ProductRecommendationsComponent } from '../product-recommendations/product-recommendations.component';
+import { Recommendation } from '../_models/recommendation';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-shopping-cart',
-  imports: [RouterLink, CurrencyPipe],
+  imports: [RouterLink, CurrencyPipe, ProductRecommendationsComponent],
   templateUrl: './shopping-cart.component.html',
   styleUrls: ['./shopping-cart.component.scss']
 })
@@ -17,6 +19,7 @@ export class ShoppingCartComponent implements OnInit {
   cart:Cart;
   cartItemCount:number =0;
   totalPrice:number=0;
+  cartProductIds:string[]=[];
 
   constructor(private backendServices : SpringbootservicesService) {
   //  console.log("Inside shopping constrcutor");
@@ -59,6 +62,7 @@ export class ShoppingCartComponent implements OnInit {
         this.cart=data;
         this.cartItemCount=0;
         this.totalPrice=0;
+        this.cartProductIds=[];
         this.backendServices.cartsuject.next(this.cart);
         },
         err => {
@@ -76,12 +80,23 @@ export class ShoppingCartComponent implements OnInit {
     product.quantity=(product.quantity||0)+1;
     if(!cartId){
       this.createorupdatecart(product,"");
-      localStorage.setItem('cartId',this.cart.cartid);
     }else{
       this.createorupdatecart(product,cartId);
     }
 }
 
+
+addRecommendedToCart(rec:Recommendation){
+  const inCart=this.cart?.products?.find(p => p.productid===rec.productid);
+  this.addToCart(inCart ?? {
+    productid: rec.productid,
+    title: rec.title,
+    category: rec.category,
+    price: rec.price,
+    imageurl: rec.imageurl ?? '',
+    quantity: 0
+  });
+}
 
 removeFromCart(product:Product){
   let cartId=localStorage.getItem('cartId');
@@ -96,6 +111,9 @@ createorupdatecart(productform: Product, cartid:string){
   this.backendServices.createorupdatecart(productform,cartid).subscribe(
     data => {
       this.cart=data;
+      if(!cartid){
+        localStorage.setItem('cartId',this.cart.cartid);
+      }
       this.updateTotalPriceAndQuntity();
       this.backendServices.cartsuject.next(this.cart);
     },
@@ -109,6 +127,7 @@ createorupdatecart(productform: Product, cartid:string){
 updateTotalPriceAndQuntity(){
   this.cartItemCount=0;
   this.totalPrice=0;
+  this.cartProductIds=(this.cart?.products ?? []).map(p => p.productid);
   for(let productlist  in this.cart.products){
    this.cartItemCount += this.cart.products[productlist].quantity;
    this.totalPrice+=this.cart.products[productlist].quantity*this.cart.products[productlist].price;

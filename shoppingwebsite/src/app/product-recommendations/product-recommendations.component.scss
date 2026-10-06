@@ -1,0 +1,24 @@
+.recommendations {
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+// single row of cards; scrolls horizontally when the list is wider than the page
+.rec-scroller {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 8px;
+}
+
+.rec-card {
+  flex: 0 0 200px;
+  scroll-snap-align: start;
+}
+
+.rec-card img {
+  height: 160px;
+  object-fit: cover;
+}
